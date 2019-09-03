@@ -1,0 +1,20 @@
+{
+  "name": "imoviewer",
+  "version": "1.0.0",
+  "description": "Image previewer before upload photo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "uploader",
+    "image",
+    "viewer"
+  ],
+  "author": "Salauddin Rana",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-minify": "^3.1.0"
+  }
+}
