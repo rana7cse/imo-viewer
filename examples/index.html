@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Example of imo viewer</title>
+</head>
+<body>
+<img src="" alt="" id="image-previewer">
+<input type="file" id="file-input">
+<script src="jquery.min.js"></script>
+<script src="../src/imoViewer.js"></script>
+<script>
+  $(function () {
+    $('#file-input').imoViewer({
+      'preview' : '#image-previewer'
+    })
+  });
+</script>
+</body>
+</html>

@@ -14,11 +14,20 @@
 ;
 
 (function ($,window,document,undefined) {
-  'use strict';
+  /*
+  * Error codes
+  * */
+  const IMAGE_SIZE_NOT_MATCH = 400;
+  const TOO_LARGE_FILE = 500;
+
+  const fireEvent = (fn,...params) => {
+    return (typeof fn === 'function') && fn(...params);
+  };
+
   $.fn.imoViewer = function (options) {
     const nameOnly = options.nameOnly || false;
-    const maxWidth = options.maxWidth || 1280;
-    const maxHeight = options.maxHeight || 800;
+    const maxWidth = options.maxWidth || null;
+    const maxHeight = options.maxHeight || null;
 
     $(this).change(function (e) {
       e.preventDefault();
@@ -36,15 +45,14 @@
           image.onload = function (img) {
             const height = this.height;
             const width = this.width;
-            if (height <= maxHeight && width <= maxWidth) {
-              typeof options.onBeforePreview === 'function' && options.onBeforePreview(file.target,this);
-              $(options.preview).attr('src',content);
-              typeof options.onAfterPreview === 'function' && options.onAfterPreview(file.target,this);
-              typeof options.onSuccess === 'function' && options.onSuccess(element,this);
-            } else {
-              let comment = `Image size should be less then [${maxWidth}X${maxHeight}]`;
-              typeof options.onError === 'function' && options.onError(comment,this);
+            if (( maxWidth != null && height > maxHeight) || (maxHeight != null && width > maxWidth)) {
+              fireEvent(options.onError,IMAGE_RESULATION_NOT_MATCH,element,this);
               $(element).val("");
+            } else {
+              fireEvent(options.onBeforePreview,element,file.target,this);
+              $(options.preview).attr('src',content);
+              fireEvent(options.onAfterPreview,element,file.target,this);
+              fireEvent(options.onSuccess,element,file.target,this);
             }
           }
         };
