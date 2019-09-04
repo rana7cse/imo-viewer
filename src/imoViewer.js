@@ -46,7 +46,7 @@
             const height = this.height;
             const width = this.width;
             if (( maxWidth != null && height > maxHeight) || (maxHeight != null && width > maxWidth)) {
-              fireEvent(options.onError,IMAGE_RESULATION_NOT_MATCH,element,this);
+              fireEvent(options.onError,IMAGE_SIZE_NOT_MATCH,element,this);
               $(element).val("");
             } else {
               fireEvent(options.onBeforePreview,element,file.target,this);

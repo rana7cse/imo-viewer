@@ -1,4 +1,5 @@
-*jquery.imoViewer*
+#jquery.imoViewer
+
 A lightweight jQuery plugin for image previewer when you change a image through file input before uploading. That's also help you to validate image property (e.g size,width,height).
 
 Usage
