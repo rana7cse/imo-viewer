@@ -9,14 +9,14 @@
 </head>
 <body>
 <img src="" alt="" id="image-previewer">
-<input type="file" id="file-input">
+<input type="file" id="file-input" class="point" data-viewer-target="image-previewer">
+<input type="file" name="" id="imoViewer">
 <script src="jquery.min.js"></script>
 <script src="../src/imoViewer.js"></script>
 <script>
   $(function () {
-    $('#file-input').imoViewer({
-      'preview' : '#image-previewer',
-    })
+    $('.point').imoViewer();
+    $('#imoViewer').imoViewer();
   });
 </script>
 </body>
