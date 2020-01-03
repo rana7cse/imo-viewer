@@ -120,7 +120,6 @@
       e.preventDefault();
       let file = $(this)[0].files;
       let element = $(this);
-      console.log(file);
     })
   };
 
