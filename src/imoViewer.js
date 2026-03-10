@@ -1,5 +1,5 @@
 /*--------------------------------------
- * jQuery.imoViewer jQuery Plugin v1.0
+ * jQuery.imoViewer jQuery Plugin v1.1
  *--------------------------------------
  * 
  *----------------- Author -------------
@@ -20,21 +20,24 @@
   const INVALID_FILE_FORMAT = 5001;
   const INVALID_FILE_SIZE = 5002;
   const INPUT_ERROR = 5003;
-  const INVALID_IMAGE_RESULATION = 5004;
+  const INVALID_IMAGE_RESOLUTION = 5004;
 
   let defaultConfigurations = {
-    'image' : {
-      'minHeight' : null,
-      'minWidth'  : null,
-      'maxHeight' : null,
-      'maxWidth'  : null
-    },
-    'allowFiles' : '*',
-    'fileSize' : {
+    'preview'        : null,
+    'minHeight'      : null,
+    'minWidth'       : null,
+    'maxHeight'      : null,
+    'maxWidth'       : null,
+    'allowFiles'     : '*',
+    'fileSize'       : {
       max : null,
       min : null,
     },
-    'multiple' : false
+    'multiple'       : false,
+    'onError'        : null,
+    'onSuccess'      : null,
+    'onBeforePreview': null,
+    'onAfterPreview' : null
   };
 
   const blank = (val) => {
@@ -51,8 +54,8 @@
   };
 
   let isValidSize = (file, optionFileSize) => {
-    if (!file instanceof File) {
-      throw new Error("File object expected");
+    if (!(file instanceof File)) {
+      return false;
     }
 
     if (blank(optionFileSize)) {
@@ -60,15 +63,15 @@
     }
 
     if (typeof optionFileSize !== 'object') {
-      throw new Error("fileSize option should be an object");
+      return false;
     }
 
-    if (!blank(optionFileSize.min) && file.length < optionFileSize.min) {
-      throw new Error("File size should be bigger then min file size");
+    if (!blank(optionFileSize.min) && file.size < optionFileSize.min) {
+      return false;
     }
 
-    if (!blank(optionFileSize.max) && file.length > optionFileSize.max) {
-      throw new Error("File size should be less then max file size");
+    if (!blank(optionFileSize.max) && file.size > optionFileSize.max) {
+      return false;
     }
 
     return true;
@@ -86,41 +89,49 @@
 
       if (!isValidSize(file,config.fileSize))  {
         fireEvent(config.onError,INVALID_FILE_SIZE,elem,file);
-        throw Error("Invalid file size");
+        return;
       }
 
       if (!isValidExtension(file,config.allowFiles))  {
         fireEvent(config.onError,INVALID_FILE_FORMAT,elem,file);
-        throw Error("Invalid file format");
+        return;
       }
 
       const reader = new FileReader();
-      reader.onload = function(file) {
+      reader.onload = function(e) {
         const image = new Image();
-        const content = file.target.result;
+        const content = e.target.result;
         image.src = content;
 
-        image.onload = function (img) {
+        image.onload = function () {
           const height = this.height;
           const width = this.width;
-          if (( maxWidth != null && height > maxHeight) || (maxHeight != null && width > maxWidth)) {
-            fireEvent(options.onError,IMAGE_SIZE_NOT_MATCH,element,this);
+          if ((config.maxWidth != null && width > config.maxWidth) ||
+              (config.maxHeight != null && height > config.maxHeight) ||
+              (config.minWidth != null && width < config.minWidth) ||
+              (config.minHeight != null && height < config.minHeight)) {
+            fireEvent(config.onError, INVALID_IMAGE_RESOLUTION, elem, this);
           } else {
-            fireEvent(options.onBeforePreview,element,file.target,this);
-            $(options.preview).attr('src',content);
-            fireEvent(options.onAfterPreview,element,file.target,this);
-            fireEvent(options.onSuccess,element,file.target,this);
+            fireEvent(config.onBeforePreview, elem, e.target, this);
+            $(config.preview).attr('src', content);
+            fireEvent(config.onAfterPreview, elem, e.target, this);
+            fireEvent(config.onSuccess, elem, e.target, this);
           }
-        }
+        };
       };
       reader.readAsDataURL(file);
     };
 
     $(this).change(function (e) {
       e.preventDefault();
-      let file = $(this)[0].files;
+      let files = $(this)[0].files;
       let element = $(this);
-    })
+      if (files && files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+          runFileViewer(files[i], element);
+        }
+      }
+    });
   };
 
 })($,window,document);

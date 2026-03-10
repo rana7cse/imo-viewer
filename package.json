@@ -1,8 +1,8 @@
 {
   "name": "imoviewer",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Image previewer before upload photo",
-  "main": "index.js",
+  "main": "src/imoViewer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
