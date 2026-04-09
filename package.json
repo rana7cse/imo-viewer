@@ -1,20 +1,63 @@
 {
   "name": "imoviewer",
-  "version": "1.1.1",
-  "description": "Image previewer before upload photo",
-  "main": "src/imoViewer.js",
+  "version": "1.2.0",
+  "description": "Image previewer before upload – jQuery plugin, React component and Vue 3 component",
+  "main": "dist/imoViewer-min.js",
+  "module": "dist/imoViewer-min.js",
+  "exports": {
+    ".": "./dist/imoViewer-min.js",
+    "./react": {
+      "import": "./dist/react/ImoViewer.js",
+      "require": "./dist/react/ImoViewer.cjs.js"
+    },
+    "./vue": {
+      "import": "./dist/vue/ImoViewer.js",
+      "require": "./dist/vue/ImoViewer.cjs.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
+    "build:jquery": "gulp",
+    "build:react-vue": "rollup -c rollup.config.mjs",
+    "build": "npm run build:jquery && npm run build:react-vue",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "uploader",
     "image",
-    "viewer"
+    "viewer",
+    "react",
+    "vue",
+    "jquery"
   ],
   "author": "Salauddin Rana",
   "license": "MIT",
+  "peerDependencies": {
+    "jquery": ">=1.7.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "vue": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "jquery": { "optional": true },
+    "react": { "optional": true },
+    "react-dom": { "optional": true },
+    "vue": { "optional": true }
+  },
   "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.28.5",
+    "@rollup/plugin-babel": "^7.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
     "gulp": "^4.0.2",
-    "gulp-minify": "^3.1.0"
+    "gulp-minify": "^3.1.0",
+    "rollup": "^4.60.1",
+    "rollup-plugin-vue": "^6.0.0",
+    "@vue/compiler-sfc": "^3.5.32"
   }
 }
